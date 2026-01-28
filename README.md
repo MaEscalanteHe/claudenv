@@ -25,7 +25,19 @@ The plugin manages Claude configurations in `~/.claude-accounts/`:
 └── .current      # Tracks active account
 ```
 
-Each directory becomes a `CLAUDE_CONFIG_DIR` with separate auth, settings, and history.
+Each directory becomes a `CLAUDE_CONFIG_DIR` with separate authentication and session data.
+
+### What's separated per account
+
+Each account has its own isolated:
+
+- OAuth session / authentication
+- Conversation history
+- MCP servers configuration
+- Subagents
+- Plugins
+- Project settings cache
+- Todos
 
 ## Commands
 
