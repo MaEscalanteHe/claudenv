@@ -109,7 +109,23 @@ function __claudenv_switch
         set_color green
         echo "Created account: $new_account"
         set_color normal
-        set selection $new_account
+        
+        echo $new_account > $current_file
+        set -Ux CLAUDE_CONFIG_DIR $base_dir/$new_account
+        set_color cyan
+        echo "Running 'claude' to configure the new account..."
+        set_color normal
+        
+        claude
+        if test $status -ne 0
+            echo ""
+            set_color yellow
+            echo "Configuration seems to have been interrupted."
+            echo "Account '$new_account' was created but not configured."
+            echo "Run 'claude' to configure it later."
+            set_color normal
+        end
+        return 0
     else
         set selection (echo $selection | string replace " <- current" "")
     end
@@ -158,11 +174,30 @@ function __claudenv_add
     end
 
     mkdir -p $base_dir/$account_name
+    
+    set -l current_file $base_dir/.current
+    echo $account_name > $current_file
+    set -Ux CLAUDE_CONFIG_DIR $base_dir/$account_name
+    
     set_color green
     echo "Created account: $account_name"
     set_color normal
+    echo "Switched to: $account_name"
+    echo "CLAUDE_CONFIG_DIR=$CLAUDE_CONFIG_DIR"
     echo ""
-    echo "Run 'claudenv switch' to switch to this account."
+    set_color cyan
+    echo "Running 'claude' to configure the new account..."
+    set_color normal
+    
+    claude
+    if test $status -ne 0
+        echo ""
+        set_color yellow
+        echo "Configuration seems to have been interrupted."
+        echo "Account '$account_name' was created but not configured."
+        echo "Run 'claude' to configure it later."
+        set_color normal
+    end
 end
 
 function __claudenv_list
