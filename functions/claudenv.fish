@@ -1,9 +1,24 @@
-function claudenv -d "Manage multiple Claude CLI accounts"
+function claudenv -d "Manage multiple Claude Code accounts"
+    if not command -q claude
+        set_color red
+        echo "Error: Claude Code is required but not installed."
+        set_color normal
+        echo "Install it from: https://github.com/anthropics/claude-code"
+        return 1
+    end
+
+    if not command -q fzf
+        set_color red
+        echo "Error: fzf is required but not installed."
+        set_color normal
+        echo "Install it from: https://github.com/junegunn/fzf"
+        return 1
+    end
+
     set -l base_dir $HOME/.claude-accounts
     set -l current_file $base_dir/.current
     set -l subcommand $argv[1]
 
-    # Default to switch if no subcommand
     if test -z "$subcommand"
         set subcommand switch
     end
@@ -32,14 +47,6 @@ function claudenv -d "Manage multiple Claude CLI accounts"
 end
 
 function __claudenv_switch
-    if not command -q fzf
-        set_color red
-        echo "Error: fzf is required but not installed."
-        set_color normal
-        echo "Install it from: https://github.com/junegunn/fzf"
-        return 1
-    end
-
     set -l base_dir $HOME/.claude-accounts
     set -l current_file $base_dir/.current
 
@@ -254,14 +261,6 @@ function __claudenv_current
 end
 
 function __claudenv_remove
-    if not command -q fzf
-        set_color red
-        echo "Error: fzf is required but not installed."
-        set_color normal
-        echo "Install it from: https://github.com/junegunn/fzf"
-        return 1
-    end
-
     set -l base_dir $HOME/.claude-accounts
     set -l current_file $base_dir/.current
 
