@@ -25,7 +25,7 @@ function claudenv -d "Manage multiple Claude Code accounts"
 
     switch $subcommand
         case switch
-            __claudenv_switch
+            __claudenv_switch $argv[2]
         case add
             __claudenv_add $argv[2]
         case list ls
@@ -49,9 +49,30 @@ end
 function __claudenv_switch
     set -l base_dir $HOME/.claude-accounts
     set -l current_file $base_dir/.current
+    set -l target_account $argv[1]
 
     if not test -d $base_dir
         mkdir -p $base_dir
+    end
+
+    if test -n "$target_account"
+        if test -d $base_dir/$target_account
+            echo $target_account > $current_file
+            set -eg CLAUDE_CONFIG_DIR 2>/dev/null
+            set -Ux CLAUDE_CONFIG_DIR $base_dir/$target_account
+
+            set_color green
+            echo "Switched to: $target_account"
+            set_color normal
+            echo "CLAUDE_CONFIG_DIR=$CLAUDE_CONFIG_DIR"
+            return 0
+        else
+            set_color yellow
+            echo "Account '$target_account' does not exist. Opening interactive selection..."
+            sleep 0.5
+            set_color normal
+            echo ""
+        end
     end
 
     set -l accounts (find $base_dir -maxdepth 1 -mindepth 1 -type d -exec basename {} \; 2>/dev/null | sort)
