@@ -118,6 +118,7 @@ function __claudenv_switch
         set_color normal
         
         echo $new_account > $current_file
+        set -eg CLAUDE_CONFIG_DIR 2>/dev/null
         set -Ux CLAUDE_CONFIG_DIR $base_dir/$new_account
         set_color cyan
         echo "Running 'claude' to configure the new account..."
@@ -138,6 +139,7 @@ function __claudenv_switch
     end
 
     echo $selection > $current_file
+    set -eg CLAUDE_CONFIG_DIR 2>/dev/null
     set -Ux CLAUDE_CONFIG_DIR $base_dir/$selection
 
     set_color green
@@ -184,6 +186,7 @@ function __claudenv_add
     
     set -l current_file $base_dir/.current
     echo $account_name > $current_file
+    set -eg CLAUDE_CONFIG_DIR 2>/dev/null
     set -Ux CLAUDE_CONFIG_DIR $base_dir/$account_name
     
     set_color green

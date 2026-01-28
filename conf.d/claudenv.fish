@@ -7,6 +7,7 @@ if test -f $_ce_current_file
     if test -d $_ce_base/$_ce_saved
         # Only set if not already set (universal persists across sessions)
         if not set -q CLAUDE_CONFIG_DIR
+            set -eg CLAUDE_CONFIG_DIR 2>/dev/null
             set -Ux CLAUDE_CONFIG_DIR $_ce_base/$_ce_saved
         end
     end
